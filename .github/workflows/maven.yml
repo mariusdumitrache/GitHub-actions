@@ -10,7 +10,7 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
   pull_request:
     branches: [ "main" ]
 
@@ -35,14 +35,37 @@ jobs:
         name: demo-app-1.0.0-SNAPSHOT.jar
         path: target/*.jar
 
-  deploy:
-    runs-on: ubuntu-latest
+  deploy-on-dev:
     needs: build
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: ${{ steps.deploy-to-dev.outputs.webapp-url }}
     steps:
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
         name: demo-app-1.0.0-SNAPSHOT.jar
+    - name: Echo command
+      run: echo "Running the application in dev environment"
+    - name: run application
+      run: java -jar demo-app-1.0.0-SNAPSHOT.jar
+
+  deploy-on-prod:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: ${{ steps.deploy-to-prod.outputs.webapp-url }}
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: demo-app-1.0.0-SNAPSHOT.jar
+    - name: Echo command
+      run: echo "Running the application in prod environment"
     - name: run application
       run: java -jar demo-app-1.0.0-SNAPSHOT.jar
     
