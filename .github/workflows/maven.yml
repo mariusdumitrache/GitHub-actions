@@ -44,7 +44,7 @@ jobs:
       with:
         name: demo-app-1.0.0-SNAPSHOT.jar
     - name: run application
-      run: java -jar target/demo-app-1.0.0-SNAPSHOT.jar
+      run: java -jar demo-app-1.0.0-SNAPSHOT.jar
     
     
 
