@@ -32,4 +32,5 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: target/demo-app-1.0.0-SNAPSHOT.jar
+        name: demo-app-1.0.0-SNAPSHOT.jar
+        path: target/*.jar
