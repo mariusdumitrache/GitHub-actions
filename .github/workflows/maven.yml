@@ -8,6 +8,7 @@
 
 name: Java CI with Maven
 
+run-name: Run on ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
 on:
   push:
     branches: [ "main", "dev" ]
