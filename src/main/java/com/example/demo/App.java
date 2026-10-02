@@ -17,7 +17,7 @@ public class App {
         System.out.println("Debug mode  : " + config.isDebug());
 
         Calculator calc = new Calculator();
-        System.out.println("2 + 3 = " + calc.add(2, 3));
+        System.out.println("100 + 3 = " + calc.add(100, 3));
     }
 
     static String resolveEnv() {
