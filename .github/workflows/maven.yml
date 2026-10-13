@@ -20,6 +20,7 @@ on:
       title:
         description: 'Workflow run from Github Actions Button'
         required: true
+        default: 'Change me if you like'
 jobs:
   build:
     runs-on: ubuntu-latest
