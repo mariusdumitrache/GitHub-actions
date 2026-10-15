@@ -15,7 +15,7 @@ on:
 
 jobs:
   create-issue:
-    concurrency: 1
+#    concurrency: 1
     if: ${{ vars.CREATE_ISSUE == 'True' }}
     runs-on: ubuntu-latest
     permissions:
