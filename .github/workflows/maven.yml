@@ -16,11 +16,22 @@ on:
     branches: [ "main" ]
 
   workflow_dispatch:
-
+    inputs:
+      title:
+        description: 'Workflow run from Github Actions Button'
+        required: true
+        default: 'Change me if you like'
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      echo-text: ${{ steps.output-text.outputs.output-text }}
     steps:
+    - name: print-description
+      run: echo ${{ inputs.title }}
+    - name: capture-output
+      id: output-text
+      run: echo "output-text="${{ inputs.title }} >> $GITHUB_OUTPUT
     - uses: actions/checkout@v4
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -42,8 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: dev
-      url: ${{ steps.deploy-to-dev.outputs.webapp-url }}
     steps:
+    - name: print output
+      run: echo ${{ needs.build.outputs.echo-text }}
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:
@@ -59,8 +71,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prod
-      url: ${{ steps.deploy-to-prod.outputs.webapp-url }}
     steps:
+    - name: print message
+      run: echo ${{ needs.build.outputs.echo-text }}
     - name: Download artifact
       uses: actions/download-artifact@v4
       with:

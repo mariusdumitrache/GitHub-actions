@@ -1,0 +1,28 @@
+name: Create Issue
+on:
+  workflow_call:
+    inputs:
+      title:
+        description: "Issue title"
+        required: true
+        type: string
+        default: "This is the default issue title"
+      body:
+        description: "Issue body"
+        required: true
+        type: string
+        default: "This is the default boby text of the issue"
+
+jobs:
+  create-issue:
+#    concurrency: 1
+    if: ${{ vars.CREATE_ISSUE == 'True' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Create Issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: gh issue create --title "${{ inputs.title }}" --body "${{ inputs.body }}" --label "bug" --repo $GH_REPO
