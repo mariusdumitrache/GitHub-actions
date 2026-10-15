@@ -1,0 +1,89 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Managed Workflow
+
+run-name: Run on workflow ${{ github.workflow }}, on branch ${{ github.ref }}, triggered by ${{ github.event_name }}
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+    inputs:
+      title:
+        description: 'Workflow run from Github Actions Button'
+        required: true
+        default: 'Change me if you like'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-app-1.0.0-SNAPSHOT.jar
+          path: target/*.jar
+
+  create-issue:
+    strategy:
+      matrix:
+        prod: ["prod1", "prod2"]
+        level: ["trivial", "medium", "high", "blocker"]
+    uses: ./.github/workflows/create_issue.yml
+    secrets: inherit
+    with:
+      title: "${{ matrix.prod }} - ${{ matrix.level }} issue"
+      body: "This is a ${{ matrix.level }} issue for ${{ matrix.prod }}"
+
+  deploy-on-dev:
+    needs: build
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: demo-app-1.0.0-SNAPSHOT.jar
+    - name: Echo command
+      run: echo "Running the application in dev environment"
+    - name: run application
+      run: java -jar demo-app-1.0.0-SNAPSHOT.jar
+
+  deploy-on-prod:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: demo-app-1.0.0-SNAPSHOT.jar
+    - name: Echo command
+      run: echo "Running the application in prod environment"
+    - name: run application
+      run: java -jar demo-app-1.0.0-SNAPSHOT.jar
+    
+    
+
+         
