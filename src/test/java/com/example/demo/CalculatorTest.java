@@ -24,7 +24,7 @@ class CalculatorTest {
 
     @Test
     void multipliesNumbers() {
-        assertEquals(56, calc.multiply(6, 9));
+        assertEquals(54, calc.multiply(6, 9));
     }
 
     @Test
