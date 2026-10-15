@@ -52,7 +52,7 @@ jobs:
       body: "This is a ${{ matrix.level }} issue for ${{ matrix.prod }}"
 
   deploy-on-dev:
-    needs: build
+    needs: [build, create-issue]
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     environment:
