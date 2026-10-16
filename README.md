@@ -1,6 +1,6 @@
 # demo-app
 
-A small Java 17 / Maven project for practising GitHub Actions with three environments: **TEST**, **UAT** and **PROD**.
+A small Java 25 / Maven project for practising GitHub Actions with three environments: **TEST**, **UAT** and **PROD**.
 
 ## Layout
 
