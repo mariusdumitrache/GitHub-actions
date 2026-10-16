@@ -33,10 +33,10 @@ jobs:
       id: output-text
       run: echo "output-text="${{ inputs.title }} >> $GITHUB_OUTPUT
     - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: Set up JDK 25
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '25'
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
