@@ -33,4 +33,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: |
-          gh workflow run deploy-java.yml --repo ${{ env.GH_REPO }} --ref dev 
+          gh workflow run deploy-java.yml --repo ${{ env.GH_REPO }} --ref dev  --f environment=dev --f run_id=${{ github.run_id }}
